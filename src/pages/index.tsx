@@ -41,12 +41,18 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="login-container">
-      <div className="login-left">
-        <div className="login-illustration">
-          <img src="https://media.istockphoto.com/id/1302890997/vector/hand-holding-debit-or-credit-card-for-payment.jpg?s=612x612&w=0&k=20&c=OP-4pSwFTiCdPEuUwnxpVFHieozYLJIx8-KdHfmwC_s=" alt="Login Illustration" />
-        </div>
-      </div>
+   <div className="login-container">
+  <div className="login-left">
+    <div className="login-illustration">
+      <img 
+        src="/image/payment.png" 
+        alt="Payment Illustration" 
+        style={{ width: '100%', maxWidth: '400px', objectFit: 'contain' }} 
+      />
+    </div>
+  </div>
+
+
 
       <div className="login-right">
         <h2>Welcome back</h2>
