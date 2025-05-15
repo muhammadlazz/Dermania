@@ -1,0 +1,111 @@
+/* Dashboard Layout */
+.dashboard-container {
+  display: flex;
+  height: 100vh;
+  background: linear-gradient(to right, #7b2ff7, #9b55d5); /* Menggunakan gradien yang sama dengan halaman login */
+}
+
+.sidebar {
+  width: 250px;
+  background-color: #2e2b5f; /* Sesuaikan warna dengan palet login */
+  padding: 20px;
+  color: white;
+}
+
+.sidebar-item {
+  margin-bottom: 20px;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.sidebar-item:hover {
+  background-color: #4c4780;
+  padding-left: 10px;
+  transition: all 0.3s ease;
+}
+
+.dashboard-content {
+  flex: 1;
+  background-color: #f9f9f9;
+  padding: 20px;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 20px;
+}
+
+.dashboard-header h1 {
+  font-size: 32px;
+  color: #333;
+}
+
+.user-info p {
+  font-size: 16px;
+}
+
+.user-card {
+  display: flex;
+  align-items: center;
+  background-color: #7b2ff7; /* Menggunakan warna yang sama dengan tombol login */
+  color: white;
+  padding: 5px 15px;
+  border-radius: 5px;
+}
+
+.stats-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.stat-card {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 22%;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.stat-card h3 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.stat-card p {
+  font-size: 14px;
+}
+
+.transaction-history {
+  margin-top: 40px;
+}
+
+.transaction-history h3 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.transaction-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.transaction-row p {
+  font-size: 14px;
+  color: #333;
+}
+
+.balance-graph {
+  margin-top: 40px;
+}
+
+.bar-graph {
+  height: 200px;
+  background-color: #ddd;
+  margin-top: 20px;
+}

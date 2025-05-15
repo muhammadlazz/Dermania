@@ -107,3 +107,19 @@
 .footer-links a:hover {
   text-decoration: underline;
 }
+
+/* src/styles/LoginPage.css */
+
+/* Styling untuk pesan error */
+.error-message {
+  color: red;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+/* Styling untuk pesan sukses */
+.success-message {
+  color: green;
+  font-size: 14px;
+  margin-top: 10px;
+}

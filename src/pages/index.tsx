@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import '../styles/LoginPage.css';  // Import style CSS untuk login page
+import { useRouter } from 'next/router'; // Import useRouter
+import '../styles/LoginPage.css'; 
 
 interface LoginFormValues {
   username: string;
@@ -13,8 +14,10 @@ const LoginPage: React.FC = () => {
   });
 
   const [error, setError] = useState<string>('');
+  const [successMessage, setSuccessMessage] = useState<string>('');
+  
+  const router = useRouter(); // Inisialisasi useRouter
 
-  // Fungsi untuk menangani perubahan input
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormValues((prev) => ({
@@ -23,36 +26,41 @@ const LoginPage: React.FC = () => {
     }));
   };
 
-  // Fungsi untuk menangani submit form
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!formValues.username || !formValues.password) {
       setError('Username dan password harus diisi');
+      setSuccessMessage(''); // Clear success message if any error exists
       return;
     }
 
-    // Reset error jika validasi sukses
     setError('');
 
-    // Logika untuk login (misalnya, panggil API login)
-    console.log('Login dengan username:', formValues.username);
-    console.log('Login dengan password:', formValues.password);
+    // Simulasi login sukses
+    console.log('Login berhasil dengan username:', formValues.username);
+    console.log('Login berhasil dengan password:', formValues.password);
+
+    // Set success message
+    setSuccessMessage('Login berhasil! Redirecting to Dashboard...');
+    
+    // Setelah 2 detik, redirect ke halaman dashboard
+    setTimeout(() => {
+      router.push('/dashboard'); // Arahkan ke halaman dashboard
+    }, 2000); // 2 detik delay
   };
 
   return (
-   <div className="login-container">
-  <div className="login-left">
-    <div className="login-illustration">
-      <img 
-        src="/image/payment.png" 
-        alt="Payment Illustration" 
-        style={{ width: '100%', maxWidth: '400px', objectFit: 'contain' }} 
-      />
-    </div>
-  </div>
-
-
+    <div className="login-container">
+      <div className="login-left">
+        <div className="login-illustration">
+          <img 
+            src="/image/payment.png" 
+            alt="Payment Illustration" 
+            style={{ width: '100%', maxWidth: '400px', objectFit: 'contain' }} 
+          />
+        </div>
+      </div>
 
       <div className="login-right">
         <h2>Welcome back</h2>
@@ -83,6 +91,7 @@ const LoginPage: React.FC = () => {
           </div>
 
           {error && <div className="error-message">{error}</div>}
+          {successMessage && <div className="success-message">{successMessage}</div>} {/* Display success message */}
 
           <button type="submit" className="login-button">Login</button>
 
