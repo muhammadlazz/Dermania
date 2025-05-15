@@ -44,7 +44,7 @@ const LoginPage: React.FC = () => {
     <div className="login-container">
       <div className="login-left">
         <div className="login-illustration">
-          <img src="https://www.example.com/your-image-url.png" alt="Login Illustration" />
+          <img src="https://media.istockphoto.com/id/1302890997/vector/hand-holding-debit-or-credit-card-for-payment.jpg?s=612x612&w=0&k=20&c=OP-4pSwFTiCdPEuUwnxpVFHieozYLJIx8-KdHfmwC_s=" alt="Login Illustration" />
         </div>
       </div>
 
