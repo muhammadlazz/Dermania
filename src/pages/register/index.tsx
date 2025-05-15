@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
-import '../../styles/register.css'; 
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router'; // Import useRouter
+import '../../styles/register.css'; // Path yang benar
+
 interface RegisterFormValues {
   username: string;
   password: string;
@@ -15,6 +17,8 @@ const RegisterPage: React.FC = () => {
 
   const [error, setError] = useState<string>('');
   const [successMessage, setSuccessMessage] = useState<string>('');
+
+  const router = useRouter(); // Initialize useRouter
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -42,10 +46,10 @@ const RegisterPage: React.FC = () => {
     setError('');
     setSuccessMessage('Registration successful! You can now login.');
 
-    // Optional: You could redirect to login page after successful registration
-    // setTimeout(() => {
-    //   router.push('/login');
-    // }, 2000); 
+    // Redirect to login page after 2 seconds
+    setTimeout(() => {
+      router.push('/');
+    }, 2000); 
   };
 
   return (
@@ -106,7 +110,7 @@ const RegisterPage: React.FC = () => {
           <button type="submit" className="login-button">Register</button>
 
           <div className="footer-links">
-            <a href="/login">Already have an account? Login here</a>
+            <a href="/">Already have an account? Login here</a>
           </div>
         </form>
       </div>
