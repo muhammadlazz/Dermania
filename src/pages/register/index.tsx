@@ -1,23 +1,20 @@
-// src/pages/login/index.tsx
 import React, { useState } from 'react';
-import { useRouter } from 'next/router'; // Import useRouter
-import '../styles/LoginPage.css'; 
-
-interface LoginFormValues {
+import '../../styles/register.css'; 
+interface RegisterFormValues {
   username: string;
   password: string;
+  confirmPassword: string;
 }
 
-const LoginPage: React.FC = () => {
-  const [formValues, setFormValues] = useState<LoginFormValues>({
+const RegisterPage: React.FC = () => {
+  const [formValues, setFormValues] = useState<RegisterFormValues>({
     username: '',
     password: '',
+    confirmPassword: '',
   });
 
   const [error, setError] = useState<string>('');
   const [successMessage, setSuccessMessage] = useState<string>('');
-  
-  const router = useRouter(); // Inisialisasi useRouter
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -30,25 +27,25 @@ const LoginPage: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formValues.username || !formValues.password) {
-      setError('Username dan password harus diisi');
-      setSuccessMessage(''); // Clear success message if any error exists
+    if (!formValues.username || !formValues.password || !formValues.confirmPassword) {
+      setError('All fields must be filled!');
+      setSuccessMessage('');
+      return;
+    }
+
+    if (formValues.password !== formValues.confirmPassword) {
+      setError('Password and Confirm Password must match!');
+      setSuccessMessage('');
       return;
     }
 
     setError('');
+    setSuccessMessage('Registration successful! You can now login.');
 
-    // Simulasi login sukses
-    console.log('Login berhasil dengan username:', formValues.username);
-    console.log('Login berhasil dengan password:', formValues.password);
-
-    // Set success message
-    setSuccessMessage('Login berhasil! Redirecting to Dashboard...');
-    
-    // Setelah 2 detik, redirect ke halaman dashboard
-    setTimeout(() => {
-      router.push('/dashboard'); // Arahkan ke halaman dashboard
-    }, 2000); // 2 detik delay
+    // Optional: You could redirect to login page after successful registration
+    // setTimeout(() => {
+    //   router.push('/login');
+    // }, 2000); 
   };
 
   return (
@@ -57,15 +54,15 @@ const LoginPage: React.FC = () => {
         <div className="login-illustration">
           <img 
             src="/image/payment.png" 
-            alt="Payment Illustration" 
+            alt="Register Illustration" 
             style={{ width: '100%', maxWidth: '400px', objectFit: 'contain' }} 
           />
         </div>
       </div>
 
       <div className="login-right">
-        <h2>Welcome back</h2>
-        <p>Login your account</p>
+        <h2>Sign Up</h2>
+        <p>Create a new account</p>
         <form onSubmit={handleSubmit}>
           <div className="input-group">
             <label htmlFor="username">Username</label>
@@ -91,14 +88,25 @@ const LoginPage: React.FC = () => {
             />
           </div>
 
-          {error && <div className="error-message">{error}</div>}
-          {successMessage && <div className="success-message">{successMessage}</div>} {/* Display success message */}
+          <div className="input-group">
+            <label htmlFor="confirmPassword">Confirm Password</label>
+            <input
+              type="password"
+              id="confirmPassword"
+              name="confirmPassword"
+              value={formValues.confirmPassword}
+              onChange={handleChange}
+              placeholder="Confirm your password"
+            />
+          </div>
 
-          <button type="submit" className="login-button">Login</button>
+          {error && <div className="error-message">{error}</div>}
+          {successMessage && <div className="success-message">{successMessage}</div>}
+
+          <button type="submit" className="login-button">Register</button>
 
           <div className="footer-links">
-            <a href="/register">Create Account</a> {/* Link ke halaman register */}
-            <a href="#">Forgot Password?</a>
+            <a href="/login">Already have an account? Login here</a>
           </div>
         </form>
       </div>
@@ -106,4 +114,4 @@ const LoginPage: React.FC = () => {
   );
 };
 
-export default LoginPage;
+export default RegisterPage;
