@@ -1,7 +1,7 @@
-// src/pages/login/index.tsx
+// src/pages/index.tsx
 import React, { useState } from 'react';
 import { useRouter } from 'next/router'; // Import useRouter
-import '../styles/LoginPage.css'; 
+import '../../styles/LoginPage.css'; 
 
 interface LoginFormValues {
   username: string;
@@ -16,7 +16,8 @@ const LoginPage: React.FC = () => {
 
   const [error, setError] = useState<string>('');
   const [successMessage, setSuccessMessage] = useState<string>('');
-  
+  const [loading, setLoading] = useState<boolean>(false);
+
   const router = useRouter(); // Inisialisasi useRouter
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -27,7 +28,7 @@ const LoginPage: React.FC = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!formValues.username || !formValues.password) {
@@ -37,18 +38,45 @@ const LoginPage: React.FC = () => {
     }
 
     setError('');
+    setLoading(true); // Set loading to true while processing
 
-    // Simulasi login sukses
-    console.log('Login berhasil dengan username:', formValues.username);
-    console.log('Login berhasil dengan password:', formValues.password);
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: formValues.username,
+          password: formValues.password,
+        }),
+      });
 
-    // Set success message
-    setSuccessMessage('Login berhasil! Redirecting to Dashboard...');
-    
-    // Setelah 2 detik, redirect ke halaman dashboard
-    setTimeout(() => {
-      router.push('/dashboard'); // Arahkan ke halaman dashboard
-    }, 2000); // 2 detik delay
+      const data = await response.json();
+
+      if (response.ok) {
+        setSuccessMessage('Login berhasil! Redirecting to Dashboard...');
+        setError('');
+        setFormValues({
+          username: '',
+          password: '',
+        });
+
+        // Setelah 2 detik, redirect ke halaman dashboard
+        setTimeout(() => {
+          router.push('/dashboard'); // Arahkan ke halaman dashboard
+        }, 2000); // 2 detik delay
+      } else {
+        setError(data.error || 'Login gagal.');
+        setSuccessMessage('');
+      }
+    } catch (err) {
+      console.error('Login error:', err);
+      setError('Terjadi kesalahan, silakan coba lagi.');
+      setSuccessMessage('');
+    } finally {
+      setLoading(false); // Set loading to false after request completion
+    }
   };
 
   return (
@@ -64,7 +92,7 @@ const LoginPage: React.FC = () => {
       </div>
 
       <div className="login-right">
-        <h2>Welcome back</h2>
+        <h2>Welcome Back Prend</h2>
         <p>Login your account</p>
         <form onSubmit={handleSubmit}>
           <div className="input-group">
@@ -75,7 +103,7 @@ const LoginPage: React.FC = () => {
               name="username"
               value={formValues.username}
               onChange={handleChange}
-              placeholder="Enter your username"
+              placeholder="Masukkan username anda"
             />
           </div>
 
@@ -87,14 +115,16 @@ const LoginPage: React.FC = () => {
               name="password"
               value={formValues.password}
               onChange={handleChange}
-              placeholder="Enter your password"
+              placeholder="Masukkan password anda"
             />
           </div>
 
           {error && <div className="error-message">{error}</div>}
           {successMessage && <div className="success-message">{successMessage}</div>} {/* Display success message */}
 
-          <button type="submit" className="login-button">Login</button>
+          <button type="submit" className="login-button" disabled={loading}>
+            {loading ? 'Logging in...' : 'Login'}
+          </button>
 
           <div className="footer-links">
             <a href="/register">Create Account</a> {/* Link ke halaman register */}

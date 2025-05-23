@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/router'; // Import useRouter
-import '../../styles/register.css'; // Path yang benar
+import React, { useState } from 'react';
+import { useRouter } from 'next/router';
+import '../../styles/register.css';
 
 interface RegisterFormValues {
   username: string;
@@ -17,8 +17,9 @@ const RegisterPage: React.FC = () => {
 
   const [error, setError] = useState<string>('');
   const [successMessage, setSuccessMessage] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const router = useRouter(); // Initialize useRouter
+  const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -28,7 +29,7 @@ const RegisterPage: React.FC = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!formValues.username || !formValues.password || !formValues.confirmPassword) {
@@ -43,23 +44,60 @@ const RegisterPage: React.FC = () => {
       return;
     }
 
-    setError('');
-    setSuccessMessage('Registration successful! You can now login.');
+    try {
+      setLoading(true);
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: formValues.username,
+          password: formValues.password,
+        }),
+      });
 
-    // Redirect to login page after 2 seconds
-    setTimeout(() => {
-      router.push('/');
-    }, 2000); 
+      let data;
+      try {
+        data = await response.json();
+      } catch (err) {
+        setError('Invalid response from server.');
+        setSuccessMessage('');
+        return;
+      }
+
+      if (response.ok) {
+        setSuccessMessage(data.message || 'Registration successful!');
+        setError('');
+        setFormValues({
+          username: '',
+          password: '',
+          confirmPassword: '',
+        });
+        setTimeout(() => {
+          router.push('/');
+        }, 2000);
+      } else {
+        setError(data.error || 'Registration failed.');
+        setSuccessMessage('');
+      }
+    } catch (err) {
+      console.error('❌ Client error:', err);
+      setError('Server error. Please try again later.');
+      setSuccessMessage('');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="login-container">
       <div className="login-left">
         <div className="login-illustration">
-          <img 
-            src="/image/payment.png" 
-            alt="Register Illustration" 
-            style={{ width: '100%', maxWidth: '400px', objectFit: 'contain' }} 
+          <img
+            src="/image/payment.png"
+            alt="Register Illustration"
+            style={{ width: '100%', maxWidth: '400px', objectFit: 'contain' }}
           />
         </div>
       </div>
@@ -76,7 +114,8 @@ const RegisterPage: React.FC = () => {
               name="username"
               value={formValues.username}
               onChange={handleChange}
-              placeholder="Enter your username"
+              placeholder="Masukkan username puki"
+              autoComplete="off"
             />
           </div>
 
@@ -88,7 +127,8 @@ const RegisterPage: React.FC = () => {
               name="password"
               value={formValues.password}
               onChange={handleChange}
-              placeholder="Enter your password"
+              placeholder="Masukkan password tod"
+              autoComplete="new-password"
             />
           </div>
 
@@ -100,14 +140,17 @@ const RegisterPage: React.FC = () => {
               name="confirmPassword"
               value={formValues.confirmPassword}
               onChange={handleChange}
-              placeholder="Confirm your password"
+              placeholder="Samain ya tod"
+              autoComplete="new-password"
             />
           </div>
 
           {error && <div className="error-message">{error}</div>}
           {successMessage && <div className="success-message">{successMessage}</div>}
 
-          <button type="submit" className="login-button">Register</button>
+          <button type="submit" className="login-button" disabled={loading}>
+            {loading ? 'Registering...' : 'Register'}
+          </button>
 
           <div className="footer-links">
             <a href="/">Already have an account? Login here</a>
